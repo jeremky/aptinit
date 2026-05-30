@@ -8,7 +8,7 @@ Le script dispose désormais d'une séparation entre un mode `server` et un mode
 
 - `install_packages` : met à jour le système et installe les applications présentes dans le fichier `config/<mode>/packages.cfg`
 
-- `enable_flathub` : installe flatpak, le repo flathub, et le store d'applications Gnome
+- `enable_flathub` : installe flatpak et le repo flathub
 
 - `enable_locate` : installe `plocate` et crée la base pour l'utiliser directement
 
