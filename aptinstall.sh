@@ -32,7 +32,7 @@ install_packages() {
 }
 
 enable_flathub() {
-  if apt install -y flatpak gnome-software gnome-software-plugin-flatpak; then
+  if apt install -y flatpak; then
     warning "Activation de Flathub..."
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     message "Flathub activé"
