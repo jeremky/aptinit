@@ -2,7 +2,7 @@
 
 Script automatisant l'installation et le paramétrage de Debian/Ubuntu.
 
-Le script dispose désormais d'une séparation entre un mode `server` et un mode `desktop`.
+Le script dispose désormais d'un mode `server` et d'un mode `desktop`.
 
 ## Fonctionnalités
 
