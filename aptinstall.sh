@@ -75,6 +75,7 @@ configure_ufw() {
   if apt -y install ufw; then
     warning "Activation du firewall ufw..."
     sed -i "s,IPV6=yes,IPV6=no," /etc/default/ufw
+    ufw allow from 192.168.1.0/24
     for port in 22/tcp 80/tcp 443/tcp; do
       ufw allow $port
     done
