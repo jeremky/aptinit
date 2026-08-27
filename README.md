@@ -55,7 +55,6 @@ disable_tty1
 disable_sudofile
 # disable_sudopasswd
 
-configure_fail2ban
 # configure_ufw
 configure_sshd
 ```
