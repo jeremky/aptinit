@@ -67,7 +67,6 @@ disable_tty1() {
   message "tty1 désactivé"
 }
 
-
 disable_sudofile() {
   warning "Désactivation du fichier .sudo_as_admin_successful..."
   echo 'Defaults !admin_flag' | tee /etc/sudoers.d/010_sudofile
