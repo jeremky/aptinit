@@ -69,9 +69,11 @@ disable_tty1() {
 
 disable_sudofile() {
   warning "Désactivation du fichier .sudo_as_admin_successful..."
-  echo 'Defaults !admin_flag' | tee /etc/sudoers.d/010_sudofile
+  echo "Defaults !admin_flag" >/etc/sudoers.d/010_sudofile || {
+    error "Échec de l'écriture de /etc/sudoers.d/010_sudofile"
+  }
   chmod 440 /etc/sudoers.d/010_sudofile || {
-    error "Problème lors de la désactivation du fichier .sudo_as_admin_successful"
+    error "Échec du chmod sur /etc/sudoers.d/010_sudofile"
   }
   message "Fichier .sudo_as_admin_successful désactivé"
 }
@@ -79,10 +81,10 @@ disable_sudofile() {
 disable_sudopasswd() {
   warning "Désactivation du mot de pass pour les utilisateurs sudo..."
   echo "%sudo ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/010_nopasswd || {
-    error "Problème lors de la configuration de sudo"
+    error "Échec de l'écriture de /etc/sudoers.d/010_nopasswd"
   }
   chmod 440 /etc/sudoers.d/010_nopasswd || {
-    error "Problème lors de la configuration des permissions sudo"
+    error "Échec du chmod sur /etc/sudoers.d/010_nopasswd"
   }
   message "Mot de passe sudo désactivé"
 }
