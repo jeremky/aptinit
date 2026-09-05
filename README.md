@@ -2,11 +2,9 @@
 
 Script automatisant l'installation et le paramétrage de Debian/Ubuntu.
 
-Le script dispose désormais d'un mode `server` et d'un mode `desktop`.
-
 ## Fonctionnalités
 
-- `install_packages` : met à jour le système et installe les applications présentes dans le fichier `config/<mode>/packages.cfg`
+- `install_packages` : met à jour le système et installe les applications présentes dans le fichier `config/packages.cfg`
 
 - `enable_flathub` : installe flatpak et le repo flathub
 
@@ -39,45 +37,53 @@ Le script dispose désormais d'un mode `server` et d'un mode `desktop`.
 
 ## Configuration
 
-Un fichier de configuration sous `config/<mode>/config.cfg` permet de paramétrer l'exécution du script selon vos préférences.
-Commentez les fonctions que vous ne voulez pas utiliser. Exemple avec le mode `server` :
+Le fichier `config/config.cfg` permet de paramétrer l'exécution du script selon vos préférences.
+Commentez les fonctions que vous ne voulez pas utiliser. Exemple :
 
 ```txt
-# aptinstall server config
+# aptinstall config
 
 install_packages
-
 # enable_flathub
-enable_locate
-enable_unattended
+# enable_locate
+# enable_unattended
 
-disable_tty1
-disable_sudofile
+# disable_tty1
+# disable_sudofile
 # disable_sudopasswd
 
 # configure_ufw
-configure_sshd
+# configure_sshd
 ```
 
-Avec le fichier de config se trouve un fichier contenant la liste des paquets à installer si `install_packages` est actif.
+Avec le fichier de config se trouve `config/packages.cfg`, contenant la liste des paquets à installer si `install_packages` est actif.
 
-Exemple avec le fichier `config/server/packages.cfg` :
+Exemple :
 
 ```txt
-# aptinstall server list
+# aptinstall packages list
 
+btop
 colordiff
 curl
+du-dust
 duf
-fail2ban
+# fail2ban
 fd-find
+# fonts-jetbrains-mono
 fzf
-git
+# gnome-shell-extension-arc-menu
+# gnome-shell-extension-dash-to-panel
+# gnome-shell-extension-dashtodock
+# gnome-shell-extension-manager
+# gnome-tweaks
 htop
 make
 ncdu
 net-tools
+# papirus-icon-theme
 pipes-sh
+procs
 ripgrep
 rsync
 shellcheck
@@ -94,8 +100,8 @@ zoxide
 
 ## Utilisation
 
-Une fois le fichier `config/<mode>/config.cfg` modifié, lancez le script avec les droits root :
+Une fois le fichier `config/config.cfg` modifié, lancez le script avec les droits root :
 
 ```bash
-sudo ./aptinstall.sh <mode>
+sudo ./aptinstall.sh
 ```
