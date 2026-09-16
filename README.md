@@ -1,4 +1,4 @@
-# aptinstall
+# aptinit
 
 Script automatisant l'installation et le paramétrage de Debian/Ubuntu.
 
@@ -41,7 +41,7 @@ Le fichier `config/config.cfg` permet de paramétrer l'exécution du script selo
 Commentez les fonctions que vous ne voulez pas utiliser. Exemple :
 
 ```txt
-# aptinstall config
+# aptinit config
 
 install_packages
 # enable_flathub
@@ -61,37 +61,21 @@ Avec le fichier de config se trouve `config/packages.cfg`, contenant la liste de
 Exemple :
 
 ```txt
-# aptinstall packages list
+# aptinit packages list
 
-btop
-colordiff
 curl
-du-dust
-duf
-# fail2ban
+fail2ban
 fd-find
-# fonts-jetbrains-mono
 fzf
-# gnome-shell-extension-arc-menu
-# gnome-shell-extension-dash-to-panel
-# gnome-shell-extension-dashtodock
-# gnome-shell-extension-manager
-# gnome-tweaks
 htop
 make
 ncdu
 net-tools
-# papirus-icon-theme
-pipes-sh
 procs
 ripgrep
 rsync
-shellcheck
-shfmt
-ssh-audit
 sysstat
 tree
-tty-clock
 unzip
 vim
 zip
@@ -103,5 +87,5 @@ zoxide
 Une fois le fichier `config/config.cfg` modifié, lancez le script avec les droits root :
 
 ```bash
-sudo ./aptinstall.sh
+sudo ./aptinit.sh
 ```
