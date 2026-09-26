@@ -56,7 +56,7 @@ enable_unattended() {
 }
 
 disable_tty1() {
-  warning "Disabling tty1..."
+  warning "Disabling tty1"
   systemctl disable getty@tty1 || {
     error "Error while disabling tty1"
   }
@@ -65,7 +65,7 @@ disable_tty1() {
 }
 
 disable_sudofile() {
-  warning "Disabling the .sudo_as_admin_successful file..."
+  warning "Disabling the .sudo_as_admin_successful file"
   echo "Defaults !admin_flag" >/etc/sudoers.d/010_sudofile || {
     error "Failed to write /etc/sudoers.d/010_sudofile"
   }
@@ -77,7 +77,7 @@ disable_sudofile() {
 }
 
 disable_sudopasswd() {
-  warning "Disabling password for sudo users..."
+  warning "Disabling the sudo password prompt"
   echo "%sudo ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/010_nopasswd || {
     error "Failed to write /etc/sudoers.d/010_nopasswd"
   }
@@ -90,7 +90,7 @@ disable_sudopasswd() {
 
 configure_ufw() {
   if apt -y install ufw; then
-    warning "Enabling ufw firewall..."
+    warning "Enabling ufw firewall"
     sed -i "s,IPV6=yes,IPV6=no," /etc/default/ufw
     ufw allow from 192.168.1.0/24
     for port in 22/tcp 80/tcp 443/tcp; do

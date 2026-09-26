@@ -18,11 +18,10 @@ A script that automates installing and configuring Debian/Ubuntu.
 
 - `disable_sudopasswd`: disables the password prompt for sudo commands. **DO NOT USE IN PRODUCTION!**
 
-- `configure_ufw`: installs and configures the `ufw` firewall with the following ports:
+- `configure_ufw`: installs and configures the `ufw` firewall and opens the following ports:
   - 22/tcp
   - 80/tcp
   - 443/tcp
-
 
 - `configure_sshd`: creates an `sshd` file (`/etc/ssh/sshd_config.d/<user>.conf`) with the following:
   - Restricts access to the main user (UID 1000)
