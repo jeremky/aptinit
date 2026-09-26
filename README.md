@@ -1,44 +1,45 @@
 # aptinit
 
-Script automatisant l'installation et le paramétrage de Debian/Ubuntu.
+A script that automates installing and configuring Debian/Ubuntu.
 
-## Fonctionnalités
+## Features
 
-- `install_packages` : met à jour le système et installe les applications présentes dans le fichier `config/packages.cfg`
+- `install_packages`: updates the system and installs the applications listed in `config/packages.cfg`
 
-- `enable_flathub` : installe flatpak et le repo flathub
+- `enable_flathub`: installs flatpak and the Flathub repository
 
-- `enable_locate` : installe `plocate` et crée la base pour l'utiliser directement
+- `enable_locate`: installs `plocate` and builds its database so it's ready to use
 
-- `enable_unattended` : installe `unattended-upgrades` et vous ouvre l'outil de configuration
+- `enable_unattended`: installs `unattended-upgrades` and opens its configuration tool
 
-- `disable_tty1` : désactive le tty1 si c'est pour une utilisation uniquement par SSH
+- `disable_tty1`: disables tty1, for SSH-only use
 
-- `disable_sudofile` : désactive la création automatique du fichier `.sudo_as_admin_successful`
+- `disable_sudofile`: disables the automatic creation of the `.sudo_as_admin_successful` file
 
-- `disable_sudopasswd` : désactive la demande du mot de passe pour les commandes sudo. **A NE PAS UTILISER EN PROD !**
+- `disable_sudopasswd`: disables the password prompt for sudo commands. **DO NOT USE IN PRODUCTION!**
 
-- `configure_ufw` : installe et configure le firewall `ufw` avec les ports suivants :
+- `configure_ufw`: installs and configures the `ufw` firewall with the following ports:
   - 22/tcp
   - 80/tcp
   - 443/tcp
 
-- `configure_sshd` : crée un fichier pour `sshd` (`/etc/ssh/sshd_config.d/<user>.conf`) avec les éléments suivants :
-  - Restreint l'accès à l'utilisateur principal (UID 1000)
-  - Désactive le forwarding X11
-  - Force l'utilisation de la clé `ed25519` uniquement
-  - Limite les tentatives d'authentification à 3
-  - Restreint les algorithmes aux recommandations modernes :
-    - **Kex** : `curve25519-sha256`
-    - **Ciphers** : `aes256-gcm`, `aes256-ctr`, `aes192-ctr`, `aes128-gcm`, `aes128-ctr`
-    - **MACs** : `hmac-sha2-512-etm`, `hmac-sha2-256-etm`
 
-> **Attention** : `PasswordAuthentication` reste activé par défaut. Penser à le désactiver dans `/etc/ssh/sshd_config.d/<user>.conf` après avoir configuré les clés SSH.
+- `configure_sshd`: creates an `sshd` file (`/etc/ssh/sshd_config.d/<user>.conf`) with the following:
+  - Restricts access to the main user (UID 1000)
+  - Disables X11 forwarding
+  - Enforces `ed25519` keys only
+  - Limits authentication attempts to 3
+  - Restricts algorithms to modern recommendations:
+    - **Kex**: `curve25519-sha256`
+    - **Ciphers**: `aes256-gcm`, `aes256-ctr`, `aes192-ctr`, `aes128-gcm`, `aes128-ctr`
+    - **MACs**: `hmac-sha2-512-etm`, `hmac-sha2-256-etm`
+
+> **Warning**: `PasswordAuthentication` stays enabled by default. Remember to disable it in `/etc/ssh/sshd_config.d/<user>.conf` after setting up your SSH keys.
 
 ## Configuration
 
-Le fichier `config/config.cfg` permet de paramétrer l'exécution du script selon vos préférences.
-Commentez les fonctions que vous ne voulez pas utiliser. Exemple :
+The `config/config.cfg` file lets you configure how the script runs to suit your preferences.
+Comment out the functions you don't want to use. Example:
 
 ```txt
 # aptinit config
@@ -56,9 +57,9 @@ install_packages
 # configure_sshd
 ```
 
-Avec le fichier de config se trouve `config/packages.cfg`, contenant la liste des paquets à installer si `install_packages` est actif.
+Alongside the config file is `config/packages.cfg`, which lists the packages to install when `install_packages` is enabled.
 
-Exemple :
+Example:
 
 ```txt
 # aptinit packages list
@@ -82,9 +83,9 @@ zip
 zoxide
 ```
 
-## Utilisation
+## Usage
 
-Une fois le fichier `config/config.cfg` modifié, lancez le script avec les droits root :
+Once you've edited `config/config.cfg`, run the script with root privileges:
 
 ```bash
 sudo ./aptinit.sh

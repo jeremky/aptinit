@@ -1,44 +1,44 @@
 #!/bin/bash
 
-# Messages en couleur
+# Colored messages
 error() { echo -e "\033[0;31m❯ $*\033[0m"; }
 message() { echo -e "\033[0;36m──────────\033[0m\n\033[0;32m❱ $*\033[0m"; }
 warning() { echo -e "\033[0;33m❱ $*\033[0m\n\033[0;36m──────────\033[0m"; }
 
-# Vérification de l'OS :
+# Check OS
 if ! command -v apt >/dev/null; then
-  error "Ce script nécessite apt (Debian/Ubuntu)"
+  error "This script requires apt (Debian/Ubuntu)"
   exit 1
 fi
 
-# Vérification des droits root
+# Check root privileges
 if [[ "$EUID" -ne 0 ]]; then
-  error "Droits root nécessaires"
+  error "Root privileges required"
   exit 1
 fi
 
-# Fonctions
+# Functions
 install_packages() {
-  warning "Mise à jour des paquets"
+  warning "Updating packages"
   apt update && apt -y full-upgrade
   if [[ -f "$list" ]]; then
-    warning "Installation des paquets"
+    warning "Installing packages"
     grep -v -e '#' -e '^$' "$list" | xargs apt -y install || {
-      error "Problème lors de l'installation des paquets"
+      error "Error while installing packages"
       exit 1
     }
-    message "Installation des paquets terminée"
+    message "Package installation complete"
     echo
   fi
 }
 
 enable_flathub() {
   if apt install -y flatpak gnome-software gnome-software-plugin-flatpak; then
-    warning "Activation de Flathub"
+    warning "Enabling Flathub"
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || {
-      error "Problème lors de l'activation de Flathub"
+      error "Error while enabling Flathub"
     }
-    message "Flathub activé"
+    message "Flathub enabled"
     echo
   fi
 }
@@ -56,58 +56,58 @@ enable_unattended() {
 }
 
 disable_tty1() {
-  warning "Désactivation du tty1..."
+  warning "Disabling tty1..."
   systemctl disable getty@tty1 || {
-    error "Problème lors de la désactivation du tty1"
+    error "Error while disabling tty1"
   }
-  message "tty1 désactivé"
+  message "tty1 disabled"
   echo
 }
 
 disable_sudofile() {
-  warning "Désactivation du fichier .sudo_as_admin_successful..."
+  warning "Disabling the .sudo_as_admin_successful file..."
   echo "Defaults !admin_flag" >/etc/sudoers.d/010_sudofile || {
-    error "Échec de l'écriture de /etc/sudoers.d/010_sudofile"
+    error "Failed to write /etc/sudoers.d/010_sudofile"
   }
   chmod 440 /etc/sudoers.d/010_sudofile || {
-    error "Échec du chmod sur /etc/sudoers.d/010_sudofile"
+    error "Failed to chmod /etc/sudoers.d/010_sudofile"
   }
-  message "Fichier .sudo_as_admin_successful désactivé"
+  message ".sudo_as_admin_successful file disabled"
   echo
 }
 
 disable_sudopasswd() {
-  warning "Désactivation du mot de pass pour les utilisateurs sudo..."
+  warning "Disabling password for sudo users..."
   echo "%sudo ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/010_nopasswd || {
-    error "Échec de l'écriture de /etc/sudoers.d/010_nopasswd"
+    error "Failed to write /etc/sudoers.d/010_nopasswd"
   }
   chmod 440 /etc/sudoers.d/010_nopasswd || {
-    error "Échec du chmod sur /etc/sudoers.d/010_nopasswd"
+    error "Failed to chmod /etc/sudoers.d/010_nopasswd"
   }
-  message "Mot de passe sudo désactivé"
+  message "sudo password disabled"
   echo
 }
 
 configure_ufw() {
   if apt -y install ufw; then
-    warning "Activation du firewall ufw..."
+    warning "Enabling ufw firewall..."
     sed -i "s,IPV6=yes,IPV6=no," /etc/default/ufw
     ufw allow from 192.168.1.0/24
     for port in 22/tcp 80/tcp 443/tcp; do
       ufw allow $port
     done
     ufw enable
-    message "ufw activé"
+    message "ufw enabled"
     echo
   fi
 }
 
 configure_sshd() {
   if [[ ! -d /etc/ssh/sshd_config.d ]]; then
-    error "SSH n'est pas installé"
+    error "SSH is not installed"
     return 1
   fi
-  warning "Sécurisation de SSH"
+  warning "Securing SSH"
   user=$(id -un 1000)
   tee "/etc/ssh/sshd_config.d/$user.conf" <<EOF
 # Secure Config
@@ -124,26 +124,26 @@ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
 Ciphers aes256-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-gcm@openssh.com,aes128-ctr
 EOF
   systemctl restart sshd || {
-    error "Problème lors du redémarrage de SSH"
+    error "Error while restarting SSH"
     exit 1
   }
-  message "SSH sécurisé. Modifiez le fichier /etc/ssh/sshd_config.d/$user.conf pour désactiver la connexion par mot de passe après avoir importé votre clé ed25519"
+  message "SSH secured. Edit /etc/ssh/sshd_config.d/$user.conf to disable password login after importing your ed25519 key"
   echo
 }
 
-# Exécution
+# Execution
 dir="$(dirname "$0")/config"
 cfg="$dir/config.cfg"
 list="$dir/packages.cfg"
 if [[ ! -f "$cfg" ]] || [[ ! -f "$list" ]]; then
-  error "Fichier $cfg ou $list introuvable"
+  error "File $cfg or $list not found"
   exit 1
 fi
 
 while read -r line; do
   [[ -z "$line" || "$line" == \#* ]] && continue
   if ! declare -f "$line" >/dev/null; then
-    error "Aucune fonction ne correspond au paramètre $line"
+    error "No function matches parameter $line"
     exit 1
   fi
   "$line"
