@@ -26,10 +26,11 @@ A script that automates installing and configuring Debian/Ubuntu.
 - `configure_sshd`: creates an `sshd` file (`/etc/ssh/sshd_config.d/<user>.conf`) with the following:
   - Restricts access to the main user (UID 1000)
   - Disables X11 forwarding
-  - Enforces `ed25519` keys only
+  - Enforces the `ed25519` host key only
   - Limits authentication attempts to 3
-  - Restricts algorithms to modern recommendations:
-    - **Kex**: `curve25519-sha256`
+  - Requires RSA keys of at least 3072 bits
+  - Restricts algorithms to the [ssh-audit](https://github.com/jtesta/ssh-audit) recommendations:
+    - **Kex**: `mlkem768x25519-sha256`, `sntrup761x25519-sha512` (post-quantum), `curve25519-sha256` (fallback)
     - **Ciphers**: `aes256-gcm`, `aes256-ctr`, `aes192-ctr`, `aes128-gcm`, `aes128-ctr`
     - **MACs**: `hmac-sha2-512-etm`, `hmac-sha2-256-etm`
 
